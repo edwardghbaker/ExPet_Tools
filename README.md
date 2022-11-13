@@ -6,6 +6,7 @@ A series of scripts and a GUI for processing and calculating fO2 in a number of 
 readBCF
 a script for batch reading and processing bcf files, outputing element maps. 
 
-Rock love 
+ChemCal
+a class that converts between mol, weight and oxide %
 
 Ed
