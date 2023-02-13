@@ -11,6 +11,7 @@ ArTest['Time'] = ArTest['Time']/(60*60*24) # convert to days
 ArTest.plot(x='Time', y='fO2', kind='line', color='red', label='mV')
 plt.ylabel('mV')
 plt.xlabel('Time (days)')
-pl
+plt.show()
+
 
 # %%
