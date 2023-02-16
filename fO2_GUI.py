@@ -6,6 +6,7 @@ from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 import tkinter as tk  
 from tkinter import ttk
+from fO2 import fo2
 
 
     
