@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 import scipy.optimize as sciop
-import fO2 as fO2
+from fO2 import fo2
 
 
 #%% Make the fits and define function for T calibration 
@@ -73,5 +73,22 @@ x,y = getEUT(1200)
 
 #%% calibration for fO2
 
-fO2_cali = pd.read_excel(r"C:\Users\User\OneDrive - The University of Manchester\Experiments\GasCalibration.xlsx", header = 0, low_memory=False)
+fO2_cali = pd.read_excel(r"C:\Users\User\OneDrive - The University of Manchester\Experiments\GasCalibration.xlsx", header = 1).dropna()
+fO2_cali = fO2_cali[fO2_cali['V'] > 0.01]
+fO2_cali['gas'] = 100*fO2_cali['CO2']/(fO2_cali['CO2']+fO2_cali['CO'])
+fO2_cali['mV'] = fO2_cali['V']*1000.0
+fO2_cali['fO2'] = fo2.measure_ablsolute(fO2_cali['Thermocouple'],fO2_cali['mV'])
+fO2_cali['fO2_IW'] = fo2.measure(fO2_cali['Thermocouple'],fO2_cali['mV'],rel='IW')
 
+fO2_cali.to_excel(r"C:\Users\User\OneDrive - The University of Manchester\Experiments\fO2_cali.xlsx")
+fO2_cali_100 = fO2_cali[fO2_cali['gas'] == 100]
+fO2_cali_50 = fO2_cali[fO2_cali['gas'] == 50]
+fO2_cali_0 = fO2_cali[fO2_cali['gas'] == 0]
+fig, ax = plt.subplots(figsize=(8,6))
+for i,j in zip([fO2_cali_100,fO2_cali_50,fO2_cali_0],['100%','50%','0%']):
+    ax.scatter(i['Thermocouple'],i['fO2_IW'],label=j)
+ax.legend()
+ax.set_title('fO2 calibration - %CO$_2$')
+ax.set_xlabel('Temperature ($\u00B0$C)')
+ax.set_ylabel('fO$_2$ (IW)')
+# %%
