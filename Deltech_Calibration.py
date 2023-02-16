@@ -75,6 +75,8 @@ x,y = getEUT(1200)
 
 fO2_cali = pd.read_excel(r"C:\Users\User\OneDrive - The University of Manchester\Experiments\GasCalibration.xlsx", header = 1).dropna()
 fO2_cali = fO2_cali[fO2_cali['V'] > 0.01]
+fO2_cali = fO2_cali[fO2_cali['%'] > 0]
+
 fO2_cali['gas'] = 100*fO2_cali['CO2']/(fO2_cali['CO2']+fO2_cali['CO'])
 fO2_cali['mV'] = fO2_cali['V']*1000.0
 fO2_cali['fO2'] = fo2.measure_ablsolute(fO2_cali['Thermocouple'],fO2_cali['mV'])
