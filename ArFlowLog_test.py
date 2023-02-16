@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #%% Read the data
-
 ArTest = pd.read_csv(r"C:\Users\User\OneDrive - The University of Manchester\Experiments\Ar test.csv", header = 3, low_memory=False)
 
 #%% Plot the data
@@ -12,6 +11,5 @@ ArTest.plot(x='Time', y='fO2', kind='line', color='red', label='mV')
 plt.ylabel('mV')
 plt.xlabel('Time (days)')
 plt.show()
-
 
 # %%

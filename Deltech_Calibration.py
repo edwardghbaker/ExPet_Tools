@@ -9,8 +9,10 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 import scipy.optimize as sciop
+import fO2 as fO2
 
-#%% Make the fits and defien function 
+
+#%% Make the fits and define function for T calibration 
 
 cmap = mpl.cm.get_cmap('coolwarm')
 T_calib = pd.DataFrame(data = {'1000EUT':[974,977,977,976,972,964,950],
@@ -67,3 +69,9 @@ def getEUT(TT):
 
 
 x,y = getEUT(1200)
+
+
+#%% calibration for fO2
+
+fO2_cali = pd.read_excel(r"C:\Users\User\OneDrive - The University of Manchester\Experiments\GasCalibration.xlsx", header = 0, low_memory=False)
+
