@@ -13,7 +13,7 @@ from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
 import PySimpleGUI as sg
 import tkinter as tk
 from functools import partial  
-
+import scipy
 
 class fo2():
     
@@ -176,3 +176,26 @@ class fo2():
         Rm = (K1-(3*K1*fO2)-(2*fO2**(3/2)))/(2*K1*fO2 + fO2 + (fO2**(3/2)) + (fO2**(1/2)))
         VolCO2 = 100/(1+Rm)
         return(VolCO2)
+
+    def addGasMixingContours(d=0,rel='FMQ',xCO2=0.5,axes=None):
+        if axes is None:
+            fig, axes = plt.subplots(1, 1, figsize=(8, 8))
+
+        O2 = pd.read_csv('ThermoData/O2.csv',index_col=0)
+        CO2 = pd.read_csv('ThermoData/CO2.csv',index_col=0)
+        CO = pd.read_csv('ThermoData/CO.csv',index_col=0)
+
+        xCO = 1-xCO2
+        Tc = np.linspace(800,1600)
+        Tk = Tc + 273.15
+        R = scipy.R
+
+        delH0 = lambda A,B,C,D,E,F,H,Tk: A*T + (B*Tk**2)/2 + (C*Tk**3)/3 + (D*Tk**4)/4 - E/Tk + F - H
+        s0 = lambda A,B,C,D,E,G,Tk: A*np.log(Tk) + B*Tk + (C*Tk**2)/2 + (D*Tk**3)/3 - E/(2*Tk**2) + G
+        delG
+
+        fO2 = ((xCO2/xCO)**2)*(np.exp(delG(Tk)/(R*Tk)))
+        
+
+
+
