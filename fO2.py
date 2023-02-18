@@ -290,8 +290,3 @@ class fo2():
             axes.plot(Tc,fO2(i),label=str(i))
         plt.show()
         return axes
-
-fo2.addGasMixingContours()
-#%%
-
-
