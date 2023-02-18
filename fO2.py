@@ -1,4 +1,6 @@
 
+#%% import the libraries
+
 import math as m
 import numpy as np
 import pandas as pd
@@ -14,6 +16,30 @@ import PySimpleGUI as sg
 import tkinter as tk
 from functools import partial  
 import scipy
+
+#%% define the functions for the fO2 calculation
+
+class utils():
+
+    def floatify(x):
+        try:
+            float(x)
+            return float(x)
+        except:
+            pass
+        
+        for i in range(np.shape(x)[0]):
+            for j in range(np.shape(x)[1]):
+                try:
+                    x[i,j] = float(x[i,j])
+                except:
+                    pass
+                try:
+                    x.iloc[i,j] = float(x.iloc[i,j])
+                except:
+                    pass
+        return x
+
 
 class fo2():
     
@@ -177,25 +203,95 @@ class fo2():
         VolCO2 = 100/(1+Rm)
         return(VolCO2)
 
-    def addGasMixingContours(d=0,rel='FMQ',xCO2=0.5,axes=None):
+    def addGasMixingContours(d=0,rel='IW',xCO2=[0.001,0.01,0.1,0.5,0.9,0.99,0.999],axes=None):
         if axes is None:
             fig, axes = plt.subplots(1, 1, figsize=(8, 8))
 
-        O2 = pd.read_csv('ThermoData/O2.csv',index_col=0)
-        CO2 = pd.read_csv('ThermoData/CO2.csv',index_col=0)
-        CO = pd.read_csv('ThermoData/CO.csv',index_col=0)
+        O2_data = utils.floatify(pd.read_csv('ThermoData/O2.csv',index_col=0))
+        CO2_data = utils.floatify(pd.read_csv('ThermoData/CO2.csv',index_col=0))
+        CO_data = utils.floatify(pd.read_csv('ThermoData/CO.csv',index_col=0))
+        del_fH_CO = -110.53	#J/mol
+        del_fH_CO2 = -393.52 #J/mol
+        del_fH_O2 = 0 #kJ/mol
 
-        xCO = 1-xCO2
-        Tc = np.linspace(800,1600)
-        Tk = Tc + 273.15
-        R = scipy.R
+        xCO2 = np.array(xCO2)
 
-        delH0 = lambda A,B,C,D,E,F,H,Tk: A*T + (B*Tk**2)/2 + (C*Tk**3)/3 + (D*Tk**4)/4 - E/Tk + F - H
-        s0 = lambda A,B,C,D,E,G,Tk: A*np.log(Tk) + B*Tk + (C*Tk**2)/2 + (D*Tk**3)/3 - E/(2*Tk**2) + G
-        delG
+        delH0_func = lambda A,B,C,D,E,F,H,T: A*T + (B*T**2)/2 + (C*T**3)/3 + (D*T**4)/4 - E/T + F - H
+        s0_func = lambda A,B,C,D,E,G,T: A*np.log(T) + B*T + (C*T**2)/2 + (D*T**3)/3 - E/(2*T**2) + G
 
-        fO2 = ((xCO2/xCO)**2)*(np.exp(delG(Tk)/(R*Tk)))
+        def H_S_O2(Tk):
+            delH0 = np.array([])
+            s0 = np.array([])
+            for T in Tk:
+                if T <= 700:
+                    A,B,C,D,E,F,G,H = O2_data['100. - 700.'][:8]
+                    delH0 = np.append(delH0,delH0_func(A,B,C,D,E,F,H,T))
+                    s0 = np.append(s0,s0_func(A,B,C,D,E,G,T))
+                elif T > 700 and T <= 2000:
+                    A,B,C,D,E,F,G,H = O2_data['700. - 2000.'][:8]
+                    delH0 = np.append(delH0,delH0_func(A,B,C,D,E,F,H,T))
+                    s0 = np.append(s0,s0_func(A,B,C,D,E,G,T))
+                elif T > 2000:
+                    A,B,C,D,E,F,G,H = O2_data['2000. - 6000.'][:8]
+                    delH0 = np.append(delH0,delH0_func(A,B,C,D,E,F,H,T))
+                    s0 = np.append(s0,s0_func(A,B,C,D,E,G,T))
+                else:
+                    print('Error - H_S_O2')
+            return delH0,s0
         
+        def H_S_CO(Tk):
+            delH0 = []
+            s0 = []
+            for T in Tk:
+                if T <= 1200:
+                    A,B,C,D,E,F,G,H = CO_data['298. - 1200.'][:8]
+                    delH0 = np.append(delH0,delH0_func(A,B,C,D,E,F,H,T))
+                    s0 = np.append(s0,s0_func(A,B,C,D,E,G,T))
+                elif T > 1200:
+                    A,B,C,D,E,F,G,H = CO_data['1200. - 6000.'][:8]
+                    delH0 = np.append(delH0,delH0_func(A,B,C,D,E,F,H,T))
+                    s0 = np.append(s0,s0_func(A,B,C,D,E,G,T))
+                else:
+                    print('Error - H_S_CO')
+            return delH0,s0
 
+        def H_S_CO2(Tk):
+            delH0 = []
+            s0 = []
+            for T in Tk:
+                if T <= 1300:
+                    A,B,C,D,E,F,G,H = CO2_data['298. - 1300.'][:8]
+                    delH0 = np.append(delH0,delH0_func(A,B,C,D,E,F,H,T))
+                    s0 = np.append(s0,s0_func(A,B,C,D,E,G,T))
+                elif T > 1300:
+                    A,B,C,D,E,F,G,H = CO2_data['1300. - 6000.'][:8]
+                    delH0 = np.append(delH0,delH0_func(A,B,C,D,E,F,H,T))
+                    s0 = np.append(s0,s0_func(A,B,C,D,E,G,T))
+                else:
+                    print('Error - H_S_CO2')
+            return delH0,s0
+
+
+        Tc = np.linspace(800,1600,801)
+        Tk = Tc + 273.15
+        R = scipy.constants.R
+        delH0_O2, s0_O2 = H_S_O2(Tk)
+        delH0_CO, s0_CO = H_S_CO(Tk)
+        delH0_CO2, s0_CO2 = H_S_CO2(Tk)
+
+        delG = 2*(del_fH_CO2+delH0_CO2-Tk*s0_CO2) - 2*(del_fH_CO+delH0_CO-Tk*s0_CO) - (del_fH_O2+delH0_O2-Tk*s0_O2)
+        # print(xCO2)
+        fO2 = lambda xCO2: ((xCO2/(1-xCO2))**2)*(np.exp(delG/(R*Tk)))
+        print(delG/(R*Tk))
+
+        cmap = mpl.cm.get_cmap('Greys')
+
+        for i in xCO2:
+            axes.plot(Tc,fO2(i),label=str(i))
+        plt.show()
+        return axes
+
+fo2.addGasMixingContours()
+#%%
 
 
