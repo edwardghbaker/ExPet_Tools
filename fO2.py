@@ -39,7 +39,7 @@ class utils():
                 except:
                     pass
         return x
-
+#%%
 
 class fo2():
     
@@ -203,7 +203,7 @@ class fo2():
         VolCO2 = 100/(1+Rm)
         return(VolCO2)
 
-    def addGasMixingContours(d=0,rel='IW',xCO2=[0.001,0.01,0.1,0.5,0.9,0.99,0.999],axes=None):
+    def addGasMixingContours(d=0,rel='IW',P=1,xCO2=[0.001,0.01,0.1,0.5,0.9,0.99,0.999],axes=None):
         if axes is None:
             fig, axes = plt.subplots(1, 1, figsize=(8, 8))
 
@@ -213,12 +213,10 @@ class fo2():
         del_fH_CO = -110.53	#J/mol
         del_fH_CO2 = -393.52 #J/mol
         del_fH_O2 = 0 #kJ/mol
-
         xCO2 = np.array(xCO2)
 
-        delH0_func = lambda A,B,C,D,E,F,H,T: A*T + (B*T**2)/2 + (C*T**3)/3 + (D*T**4)/4 - E/T + F - H
-        s0_func = lambda A,B,C,D,E,G,T: A*np.log(T) + B*T + (C*T**2)/2 + (D*T**3)/3 - E/(2*T**2) + G
-
+        delH0_func = lambda A,B,C,D,E,F,H,T: A*(T/1000) + (B*(T/1000)**2)/2 + (C*(T/1000)**3)/3 + (D*(T/1000)**4)/4 - E/(T/1000) + F - H
+        s0_func = lambda A,B,C,D,E,G,T: A*np.log((T/1000)) + B*(T/1000) + (C*(T/1000)**2)/2 + (D*(T/1000)**3)/3 - E/(2*(T/1000)**2) + G
         def H_S_O2(Tk):
             delH0 = np.array([])
             s0 = np.array([])
@@ -271,7 +269,6 @@ class fo2():
                     print('Error - H_S_CO2')
             return delH0,s0
 
-
         Tc = np.linspace(800,1600,801)
         Tk = Tc + 273.15
         R = scipy.constants.R
@@ -282,11 +279,30 @@ class fo2():
         delG = 2*(del_fH_CO2+delH0_CO2-Tk*s0_CO2) - 2*(del_fH_CO+delH0_CO-Tk*s0_CO) - (del_fH_O2+delH0_O2-Tk*s0_O2)
         # print(xCO2)
         fO2 = lambda xCO2: ((xCO2/(1-xCO2))**2)*(np.exp(delG/(R*Tk)))
-        print(delG/(R*Tk))
+
+        if rel == 'NNO':
+            x = fo2.NNO(Tc,P)+d
+        elif rel == 'FMQ':
+            x = fo2.FMQ(Tc,P)+d
+        elif rel == 'IW':
+            x = fo2.IW(Tc,P)+d
+        elif rel == 'MH':
+            x = fo2.MH(Tc,P)+d
+        elif rel == 'CoCoO':
+            x = fo2.CoCoO(Tc,P)+d
+        elif rel == 'CCO':
+            x = fo2.CCO(Tc,P)+d
+        else:
+            x = 0
+
+        print(x)
 
         cmap = mpl.cm.get_cmap('Greys')
 
         for i in xCO2:
-            axes.plot(Tc,fO2(i),label=str(i))
+            axes.plot(Tc,np.log(fO2(i))-x,label=str(i))
+        plt.legend()
         plt.show()
         return axes
+
+#%%
