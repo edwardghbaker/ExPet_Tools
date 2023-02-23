@@ -11,3 +11,4 @@ from readBCF import Bruker, makePics
 
 #%%  
 
+makePics()
