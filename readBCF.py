@@ -3,6 +3,8 @@
 Created on Sat Nov 13 17:45:47 2021
 
 @author: r11403eb
+
+Must be run on python 3.10, due to hyperspy incompatibility
 """
 
 #%%
