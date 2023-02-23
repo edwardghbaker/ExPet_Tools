@@ -53,6 +53,9 @@ ax.vlines(-9.729,-1,5,label='Iron-Wustite buffer',color='k',ls='--',lw=3)
 for i,j,col in zip(experimentsFO2[1:],exp_labels[1:],col[1:]):
     ax.vlines(i,-1,5,label=j,color=col,lw=2)
 
+for i in np.array([2,0,-2,-4,-6])-9.729:
+    ax.vlines(i,-1,5,color='r',lw=1)
+
 ax.set_ylim((0,1))
 ax.set_xlim((-20,-4))
 ax.text(-9,0.1,str(str(T)+'$^\circ$C'),weight=520)
@@ -61,3 +64,6 @@ ax.set_ylabel('M$^{3+}$/M$^{Other}$')
 ax.set_xlabel('Log(fO$_2$)')
 
 ax.legend()
+
+
+#%%
