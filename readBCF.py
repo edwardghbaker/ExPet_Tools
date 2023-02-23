@@ -4,6 +4,8 @@ Created on Sat Nov 13 17:45:47 2021
 
 @author: r11403eb
 """
+
+#%%
 import os as os
 import glob as glob
 import numpy as np
@@ -94,22 +96,7 @@ def makePics(folder=r'C:\Users\r11403eb\OneDrive - The University of Manchester\
         
         for i in tqdm(listOfFiles):
             Bruker.plotWithInfo(directory=folder,file=i)
-    
 
-    
-#makePics()000000000000000000
-        
-one = r'C:/Users/r11403eb/OneDrive - The University of Manchester/meteoriteData/DOM 14021'
-two = r'C:/Users/r11403eb/OneDrive - The University of Manchester/meteoriteData/LAR 12156'
-three = r'C:/Users/r11403eb/OneDrive - The University of Manchester/meteoriteData/MAC 88136'
-four = r'C:\Users\r11403eb\OneDrive - The University of Manchester\meteoriteData\SAH 97072'
-
-folders = [one,two,three,four]
-
-#makePics(three,method='NoInfo')
-
-for i in folders:
-    makePics(i)
 
 
 
