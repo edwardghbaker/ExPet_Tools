@@ -112,9 +112,9 @@ class CC:
         return at_DF
         
     def at2wt(self,atIndex=None,Atomic=None):
-        if atIndex == None or Atomic == None or type(atIndex) == None:
-            atIndex = self.input_DF.index
-            Atomic = self.input_DF['At. %']
+        # if atIndex == None or Atomic == None or type(atIndex) == None:
+        #     atIndex = self.input_DF.index
+        #     Atomic = self.input_DF['At. %']
         weight = []
         for i,j in enumerate(atIndex):
             weight.append(Atomic[i]*Formula(j).mass)
@@ -124,9 +124,9 @@ class CC:
         return wt_DF
         
     def at2ox_wt(self,atIndex=None,Atomic=None):
-        if atIndex == None or Atomic == None:
-            atIndex = self.input_DF.index
-            Atomic = self.input_DF['At. %']
+        # if atIndex == None or Atomic == None:
+        #     atIndex = self.input_DF.index
+        #     Atomic = self.input_DF['At. %']
         atIndex = atIndex.drop('O')
         
         charges = np.array([CC.mid(m.element(i).oxistates) for i in atIndex])
@@ -161,18 +161,21 @@ class CC:
     def get_at(self):
         return self.at_DF
 
-#%%
-data = np.array([[45.03755385,21.21894177,8.964273931,20.85766182,1.960784314,1.960784314],
-[45.48347023,21.4290303,9.053029119,21.06417332,1.98019802,0.99009901],
-[45.48347023,21.4290303,9.053029119,21.06417332,0.99009901,1.98019802],
-[45.93830493,21.64332061,9.14355941,21.27481505,1,1]])
+# #%%
+# data = np.array([[45.03755385,21.21894177,8.964273931,20.85766182,1.960784314,1.960784314],
+# [45.48347023,21.4290303,9.053029119,21.06417332,1.98019802,0.99009901],
+# [45.48347023,21.4290303,9.053029119,21.06417332,0.99009901,1.98019802],
+# [45.93830493,21.64332061,9.14355941,21.27481505,1,1]])
 
-HTi_HCr = pd.DataFrame(data=data[0,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
-HTi_LCr = pd.DataFrame(data=data[1,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
-LTi_HCr = pd.DataFrame(data=data[2,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
-LTi_LCr = pd.DataFrame(data=data[3,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
+# HTi_HCr = pd.DataFrame(data=data[0,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
+# HTi_LCr = pd.DataFrame(data=data[1,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
+# LTi_HCr = pd.DataFrame(data=data[2,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
+# LTi_LCr = pd.DataFrame(data=data[3,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
 
-#%%
+# #%%
 
-origionalMass = CC(input_DF=HTi_HCr)
+# origionalMass = CC(input_DF=HTi_HCr)
+# print(origionalMass.get_ox_wt())
+# print(origionalMass.get_wt())
+# print(origionalMass.get_at())
 # %%
