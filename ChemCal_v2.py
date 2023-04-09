@@ -127,7 +127,8 @@ class CC:
         # if atIndex == None or Atomic == None:
         #     atIndex = self.input_DF.index
         #     Atomic = self.input_DF['At. %']
-        atIndex = atIndex.drop('O')
+        try: atIndex = atIndex.drop('O')
+        except: next
         
         charges = np.array([CC.mid(m.element(i).oxistates) for i in atIndex])
         Charges = pd.DataFrame(data={'Oxidation State':charges},index=atIndex)
