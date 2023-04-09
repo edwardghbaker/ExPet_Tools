@@ -112,7 +112,7 @@ class CC:
         return at_DF
         
     def at2wt(self,atIndex=None,Atomic=None):
-        if atIndex.any() == None or Atomic.any() == None:
+        if atIndex == None or Atomic == None:
             atIndex = self.input_DF.index
             Atomic = self.input_DF['At. %']
         weight = []
