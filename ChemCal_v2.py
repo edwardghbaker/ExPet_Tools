@@ -48,9 +48,11 @@ class CC:
         if input_DF.columns[0] == 'Wt. %':
             self.at_DF = CC.wt2at(self)
             self.wt_DF = input_DF
+            self.ox_wt_DF = CC.at2ox_wt(self,atIndex=self.at_DF.index,Atomic=self.at_DF['At. %'])
         
         elif input_DF.columns[0] == 'Ox. Wt. %':
             self.at_DF = CC.ox_wt2at(self)
+            self.wt_DF = CC.at2wt(self,atIndex=self.at_DF.index,Atomic=self.at_DF['At. %'])
             self.ox_wt_DF = input_DF
         
         elif input_DF.columns[0] == 'At. %':
@@ -110,7 +112,7 @@ class CC:
         return at_DF
         
     def at2wt(self,atIndex=None,Atomic=None):
-        if atIndex == None or Atomic == None:
+        if any(atIndex) == None or any(Atomic) == None:
             atIndex = self.input_DF.index
             Atomic = self.input_DF['At. %']
         weight = []
@@ -152,15 +154,9 @@ class CC:
         return ox_wt_DF 
    
     def get_ox_wt(self):
-        if self.input_DF.columns[0] == 'Wt. %':
-            self.ox_wt_DF = CC.at2ox_wt(self,atIndex=self.at_DF.index, 
-                                        Atomic=self.at_DF['At. %'])
         return self.ox_wt_DF
     
     def get_wt(self):
-        if self.input_DF.columns[0] == 'Ox. Wt. %':
-            self.wt_DF = CC.at2wt(self,atIndex=self.at_DF.index, 
-                                        Atomic=self.at_DF['At. %'])
         return self.wt_DF
     
     def get_at(self):
