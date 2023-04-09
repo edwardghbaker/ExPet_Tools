@@ -153,13 +153,13 @@ class CC:
    
     def get_ox_wt(self):
         if self.input_DF.columns[0] == 'Wt. %':
-            self.ox_wt_DF = CC.at2ox_wt(atIndex=self.at_DF.index, 
+            self.ox_wt_DF = CC.at2ox_wt(self,atIndex=self.at_DF.index, 
                                         Atomic=self.at_DF['At. %'])
         return self.ox_wt_DF
     
     def get_wt(self):
         if self.input_DF.columns[0] == 'Ox. Wt. %':
-            self.wt_DF = CC.at2wt(atIndex=self.at_DF.index, 
+            self.wt_DF = CC.at2wt(self,atIndex=self.at_DF.index, 
                                         Atomic=self.at_DF['At. %'])
         return self.wt_DF
     
