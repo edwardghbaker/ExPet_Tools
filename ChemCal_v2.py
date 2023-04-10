@@ -58,7 +58,7 @@ class CC:
         
         elif input_DF.columns[0] == 'At. %':
             self.at_DF = input_DF
-            self.wt_DF = CC.at2wt(self)
+            self.wt_DF = CC.at2wt(self, atIndex = self.at_DF.index, Atomic = self.at_DF['At. %'])
             self.ox_wt_DF = CC.at2ox_wt(self)
           
     def mid(abc):
@@ -113,9 +113,9 @@ class CC:
         return at_DF
         
     def at2wt(self,atIndex=None,Atomic=None):
-        if atIndex.any() == None:# or Atomic == None or type(atIndex) == None:
-            atIndex = self.input_DF.index
-            Atomic = self.input_DF['At. %']
+        # if atIndex.any() == None:# or Atomic == None or type(atIndex) == None:
+        #     atIndex = self.input_DF.index
+        #     Atomic = self.input_DF['At. %']
         weight = []
         for i,j in enumerate(atIndex):
             weight.append(Atomic[i]*Formula(j).mass)
@@ -163,7 +163,7 @@ class CC:
     def get_at(self):
         return self.at_DF
 
-# #%%
+#%%
 # data = np.array([[45.03755385,21.21894177,8.964273931,20.85766182,1.960784314,1.960784314],
 # [45.48347023,21.4290303,9.053029119,21.06417332,1.98019802,0.99009901],
 # [45.48347023,21.4290303,9.053029119,21.06417332,0.99009901,1.98019802],
@@ -183,4 +183,25 @@ class CC:
 #     print(mass.get_ox_wt())
 #     print(mass.get_wt())
 #     print(mass.get_at())
-# # %%
+# %%
+# def calTiMetPercent(Valence=3.5,comp=HTi_HCr):
+#     print(type(comp))
+#     masses = CC(input_DF=comp)
+#     atomic = masses.get_at()
+#     origionalMass = masses.get_wt()
+#     A = atomic.loc['Cr'].values[0]
+#     C = atomic.loc['Ti'].values[0]
+    
+#     D = A + ((4-Valence)*C)/Valence # D is now the atomic % of Ti that needs to be added to the mix to make it the correct valence.
+#     atomic.loc['Ti'] += D
+#     print(atomic.columns[0])
+#     print(atomic.index)
+#     print(atomic)
+#     comvertToMass = CC(input_DF=atomic)
+#     newMass = comvertToMass.get_wt()
+#     log = pd.concat([origionalMass,newMass,atomic],axis=1)
+
+#     return D,log
+
+# calTiMetPercent()
+# %%
