@@ -170,13 +170,16 @@ class CC:
 
 # HTi_HCr = pd.DataFrame(data=data[0,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
 # HTi_LCr = pd.DataFrame(data=data[1,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
-# LTi_HCr = pd.DataFrame(data=data[2,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
-# LTi_LCr = pd.DataFrame(data=data[3,:],columns=['Ox. Wt. %'],index=['SiO2','Al2O3','MgO','CaO','TiO2','Cr2O3'])
+# LTi_HCr = pd.DataFrame(data=data[2,:],columns=['Wt. %'],index=['Si','Al','Mg','Ca','Ti','Cr'])
+# LTi_LCr = pd.DataFrame(data=data[3,:],columns=['At. %'],index=['Si','Al','Mg','Ca','Ti','Cr'])
+
+# comps = [HTi_HCr,HTi_LCr,LTi_HCr,LTi_LCr]
 
 # #%%
 
-# origionalMass = CC(input_DF=HTi_HCr)
-# print(origionalMass.get_ox_wt())
-# print(origionalMass.get_wt())
-# print(origionalMass.get_at())
+# for c in comps:
+#     mass = CC(input_DF=HTi_HCr)
+#     print(mass.get_ox_wt())
+#     print(mass.get_wt())
+#     print(mass.get_at())
 # %%
