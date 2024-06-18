@@ -4,7 +4,7 @@ Created on Thu Sep 22 14:04:55 2022
 
 @author: Ed
 """
-
+#%% import libraries
 import mendeleev as m
 import pandas as pd 
 import numpy as np
